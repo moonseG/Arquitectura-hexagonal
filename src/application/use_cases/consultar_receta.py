@@ -1,5 +1,5 @@
 from domain.models.receta import Receta
-from domain.ports.input.consultar_receta_port import ConsultarRecetaPort
+from application.ports.input.consultar_receta_port import ConsultarRecetaPort
 
 class ConsultarRecetaUseCase(ConsultarRecetaPort):
 
