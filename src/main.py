@@ -1,10 +1,15 @@
 from fastapi import FastAPI
-from infrastructure.api.receta_controller import router
-from infrastructure.api.user_controller import router as router
+from infrastructure.controllers.receta_controller import router as receta_router
+from infrastructure.controllers.user_controller import router as user_router
 
-app = FastAPI(titlle="Microservicio Usuarios")
-app.include_router(router)
+app = FastAPI(title="Microservicio Usuarios")
+
+app.include_router(receta_router)
+app.include_router(user_router)
+
+
 
 """@app.get("/")
 def read_root():
     return {"Bienvenido": "UNACH"}"""
+

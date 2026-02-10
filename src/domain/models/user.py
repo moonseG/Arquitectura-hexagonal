@@ -19,11 +19,9 @@ class User(BaseModel):
         self.status = UserStatus.ACTIVE
     
     def deactivate(self):
-        '''Comportamiento de dominio'''
         self.status = UserStatus.INACTIVE
 
     def is_active(self) -> bool:
-        '''Comportamiento de dominio'''
         return self.status == UserStatus.ACTIVE
 
 class UserCreate(BaseModel):
