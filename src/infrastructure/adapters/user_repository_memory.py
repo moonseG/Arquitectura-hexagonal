@@ -1,38 +1,38 @@
 from typing import List, Optional
 from uuid import uuid4
-from domain.models.user import User, UserCreate, UserUpdate, UserStatus
-from application.ports.output.user_repository import UserRepository
+from domain.models.user import Paciente, PacienteCreate, PacienteStatus
+from application.ports.output.Paciente_repository import Paciente_repository
 
-class UserRepositoryMemory(UserRepository):
+class PacienteRepositoryMemory(Paciente_repository):
     '''Implementación en memoria del repositorio de usuarios'''
 
     def __init__(self):
-        self.users = {}
+        self.pacientes = {}
 
-    def create(self, user: UserCreate) -> User:
-        user_id = str(uuid4())
-        new_user = User(
-            idusuario=user_id,
-            nombre=user.nombre,
-            email=user.email,
-            status=UserStatus.ACTIVE,
+    def create(self, paciente: PacienteCreate) -> Paciente:
+        paciente_id = str(uuid4())
+        new_paciente = Paciente(
+            idpaciente=paciente_id,
+            nombre=paciente.nombre,
+            email=paciente.email,
+            status=PacienteStatus.ACTIVE,
         )
-        self.users[new_user.idusuario] = new_user
-        return new_user
+        self.pacientes[new_paciente.idpaciente] = new_paciente
+        return new_paciente
 
-    def find_by_id(self, user_id: str) -> Optional[User]:
-        return self.users.get(user_id)
+    def find_by_id(self, paciente_id: str) -> Optional[Paciente]:
+        return self.pacientes.get(paciente_id)
 
-    def find_all(self) -> List[User]:
-        return list(self.users.values())
+    def find_all(self) -> List[Paciente]:
+        return list(self.pacientes.values())
 
-    def find_by_email(self, email: str) -> Optional[User]:
-        for user in self.users.values():
-            if user.email == email:
-                return user
+    def find_by_email(self, email: str) -> Optional[Paciente]:
+        for paciente in self.pacientes.values():
+            if paciente.email == email:
+                return paciente
         return None
 
-    def update(self, user_id: str, user_data: UserUpdate) -> Optional[User]:
+    ''''def update(self, user_id: str, user_data: UserUpdate) -> Optional[User]:
         user = self.users.get(user_id)
         if not user:
             return None
@@ -44,7 +44,7 @@ class UserRepositoryMemory(UserRepository):
         if user_data.status is not None:
             user.status = user_data.status
 
-        return user
+        return user'''
 
-    def delete(self, user_id: str) -> bool:
-        return self.users.pop(user_id, None) is not None
+    def delete(self, paciente_id: str) -> bool:
+        return self.pacientes.pop(paciente_id, None) is not None

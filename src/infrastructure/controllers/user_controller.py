@@ -1,45 +1,37 @@
 from fastapi import APIRouter, HTTPException
-from domain.models.user import UserCreate, UserUpdate
-from application.services.user_services import UserService
-from infrastructure.adapters.user_repository_memory import UserRepositoryMemory
+from domain.models.user import PacienteCreate
+from application.services.user_services import PacienteService
+from infrastructure.adapters.user_repository_memory import PacienteRepositoryMemory
 
-router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
+router = APIRouter(prefix="/pacientes", tags=["pacientes"])
 
-repository = UserRepositoryMemory()
-service = UserService(repository)
+repository = PacienteRepositoryMemory()
+service = PacienteService(repository)
 
 
 @router.post("/")
-def crear_usuario(user: UserCreate):
+def crear_paciente(paciente: PacienteCreate):
     try:
-        return service.register_user(user)
+        return service.register_paciente(paciente)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.get("/")
-def listar_usuarios():
-    return service.get_all_users()
+def listar_pacientes():
+    return service.get_all_pacientes()
 
 
-@router.get("/{user_id}")
-def obtener_usuario(user_id: str):
-    user = service.get_user(user_id)
-    if not user:
+@router.get("/{paciente_id}")
+def obtener_paciente(paciente_id: str):
+    paciente = service.get_paciente(paciente_id)
+    if not paciente:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
-    return user
+    return paciente
 
 
-@router.put("/{user_id}")
-def actualizar_usuario(user_id: str, user: UserUpdate):
-    updated = service.update_user(user_id, user)
-    if not updated:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado")
-    return updated
-
-
-@router.delete("/{user_id}")
-def eliminar_usuario(user_id: str):
-    if not service.delete_user(user_id):
+@router.delete("/{paciente_id}")
+def eliminar_paciente(paciente_id: str):
+    if not service.delete_paciente(paciente_id):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return {"mensaje": "Usuario eliminado"}
