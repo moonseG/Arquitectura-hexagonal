@@ -1,9 +1,9 @@
 from fastapi import FastAPI
-from infrastructure.controllers.user_controller import router as user_router
+from infrastructure.controllers.pedido_controller import router as pedido_router
 
 app = FastAPI(title="Microservicio Usuarios")
 
-app.include_router(user_router)
+app.include_router(pedido_router)
 
 
 
