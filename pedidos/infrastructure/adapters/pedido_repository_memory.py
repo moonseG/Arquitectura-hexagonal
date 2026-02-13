@@ -8,7 +8,7 @@ class PedidoRepositoryMemory(PedidoRepository):
     def __init__(self):
         self.pedidos = {}
 
-    def create(self, pedido: PedidoCreated) -> Pedido:
+    def create(self, pedido: PedidoCreate) -> Pedido:
         pedido_id = str(uuid4())
         new_pedido = Pedido(
             idpedido=pedido_id,

@@ -1,78 +1,63 @@
 from typing import List, Optional
-from domain.models.user import (User, UserCreate, UserUpdate, UserStatus)
-from application.ports.output.user_repository import UserRepository
+from domain.models.pedido import (Pedido, PedidoCreate, PedidoUpdate, PedidoStatus)
+from application.ports.output.pedido_repository import PedidoRepository
 
-class UserService:
-    '''Servicio de aplicacion - casos de uso relacionados con User'''
-    def __init__(self, repository: UserCreate):
+class PedidoService:
+    def __init__(self, repository: PedidoCreate):
         self.repository = repository
 
-    def register_user(self, user_data: UserCreate) -> User:
-        '''Caso de uso: Registrar un nuevo usuario'''
+    def register_pedido(self, pedido_data: PedidoCreate) -> Pedido:
         #Validaciones de negocio
-        if not user_data.nombre or not user_data.email:
-            raise ValueError("Username and email are required")
-
-        #Verificar unicidad del email
-        existing_users = self.repository.find_by_email(user_data.email)
-        if existing_users:
-            raise ValueError(f"Email {user_data.email} is already registered")
+        if not pedido_data.nombrepedido:
+            raise ValueError("Username are required")
 
         #Crear user
-        return self.repository.create(user_data)
+        return self.repository.create(pedido_data)
 
-    def get_user(self, user_id: str)-> Optional[User]:
+    def get_pedido(self, pedido_id: str)-> Optional[Pedido]:
         '''Caso de uso: Obtener un usuario por su ID'''
-        return self.repository.find_by_id(user_id)
+        return self.repository.find_by_id(pedido_id)
 
-    def get_all_users(self) -> List[User]:
+    def get_all_pedidos(self) -> List[Pedido]:
         '''Caso de uso: Obtener todos los usuarios'''
         return self.repository.find_all()
 
-    def update_user(self, user_id: str, user_data: UserUpdate) -> Optional[User]:
+    def update_pedido(self, pedido_id: str, pedido_data: PedidoUpdate) -> Optional[Pedido]:
         '''Caso de uso: Actualizar un usuario existente'''
-        user = self.repository.find_by_id(user_id)
-        if not user:
+        pedido = self.repository.find_by_id(pedido_id)
+        if not pedido:
             return None
 
-        #AValidar que el nuevo email no este en uso por otro usuario
-        if user_data.email and user_data.email != user.email:
-            existing_users = self.repository.find_by_email(user_data.email)
-            if existing_users:
-                raise ValueError(f"Email {user_data.email} is already registered")
+        return self.repository.update(pedido_id, pedido_data)
 
-        return self.repository.update(user_id, user_data)
-
-    def delete_user(self, user_id: str) -> bool:
+    def delete_pedido(self, pedido_id: str) -> bool:
         '''Caso de uso: Eliminar un usuario'''
-        return self.repository.delete(user_id)
+        return self.repository.delete(pedido_id)
 
-    def desactive_user(self, user_id: str) -> Optional[User]:
+    def desactive_pedido(self, pedido_id: str) -> Optional[Pedido]:
         '''Caso de uso: Desactivar un usuario'''
-        user = self.repository.find_by_id(user_id)
-        if not user:
+        pedido = self.repository.find_by_id(pedido_id)
+        if not pedido:
             return None
 
-        user.deactivate()
-        return self.repository.update(user_id, UserStatus(status=userStatus.INACTIVE))
+        pedido.deactivate()
+        return self.repository.update(pedido_id, PedidoStatus(status=pedidoStatus.INACTIVE))
 
-    def active_user(self, user_id: str) -> Optional[User]:
-        '''Caso de uso: Activar un usuario'''
-        user = self.repository.find_by_id(user_id)
-        if not user:
+    def active_pedido(self, pedido_id: str) -> Optional[Pedido]:
+        pedido = self.repository.find_by_id(pedido_id)
+        if not pedido:
             return None
 
-        user.active()
-        return self.repository.update(user_id, UserUpdate(status=userStatus.ACTIVE))
+        pedido.active()
+        return self.repository.update(pedido_id, PedidoUpdate(status=pedidoStatus.ACTIVE))
 
-    def get_user_stats(self) -> dict:
-        '''Caso de uso: Obtener estadisticas de usuarios'''
-        users = self.repository.find_all()
-        users = len(users)
-        active = len([u for u in users if u.is_active()])
+    def get_pedido_stats(self) -> dict:
+        pedidos = self.repository.find_all()
+        pedidos = len(pedidos)
+        active = len([u for u in pedidos if u.is_active()])
 
         return {
-            "total_users": total,
-            "active_users": active,
-            "inactive_users": total - active
+            "total_pedidos": total,
+            "active_pedidos": active,
+            "inactive_pedidos": total - active
         }

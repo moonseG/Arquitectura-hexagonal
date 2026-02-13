@@ -1,36 +1,26 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
-from domain.models.user import User, UserCreate, UserUpdate
+from domain.models.pedido import Pedido, PedidoCreate, PedidoUpdate, PedidoStatus
 
-class UserRepository(ABC):
+class PedidoRepository(ABC):
     '''Puerto de salida: Repositorio de usuarios'''
 
     @abstractmethod
-    def create(self, user: UserCreate) -> User:
-        '''Crea un nuevo usuario'''
+    def create(self, pedido: PedidoCreate) -> Pedido:
         pass
 
     @abstractmethod
-    def find_by_id(self, idusuario: str) -> Optional[User]:
-        '''Obtiene un usuario por su ID'''
+    def find_by_id(self, idpedido: str) -> Optional[Pedido]:
         pass
 
     @abstractmethod
-    def find_all(self) -> List[User]:
-        '''Obtiene todos los usuarios'''
+    def find_all(self) -> List[Pedido]:
         pass
 
     @abstractmethod
-    def find_by_email(self, email: str) -> Optional[User]:
-        '''Obtiene un usuario por su email'''
+    def update(self, idpedido: str, pedido: PedidoUpdate) -> Optional[Pedido]:
         pass
 
     @abstractmethod
-    def update(self, idusuario: str, user: UserUpdate) -> Optional[User]:
-        '''Actualiza un usuario existente'''
-        pass
-
-    @abstractmethod
-    def delete(self, idusuario: str) -> bool:
-        '''Elimina un usuario por su ID'''
+    def delete(self, idpedido: str) -> bool:
         pass
